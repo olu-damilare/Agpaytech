@@ -24,6 +24,14 @@ The application runs on port 8080
 | :-------- | :------- | :------------------------- |:------------------------- |
 | `name` | `string` | The name of the country | `true`|
 
+
+##### Request body sample
+
+```json
+{
+  "name": "Egypt"
+}
+```
 #### Get countries
 
 ```http
