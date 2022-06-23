@@ -8,6 +8,7 @@ import com.agpaytech.agpaytech.exceptions.DuplicateCountryException;
 import com.agpaytech.agpaytech.models.Country;
 import com.agpaytech.agpaytech.repository.CountryRepository;
 import com.agpaytech.agpaytech.service.CountryService;
+import com.agpaytech.agpaytech.utils.CustomPaginator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class AgpaytechAssessmentApplicationTests {
 
 	@BeforeEach
 	void setUp(){
-		countryService = new CountryService();
+		countryService = new CountryService(new CustomPaginator());
 	}
 
 	@AfterEach

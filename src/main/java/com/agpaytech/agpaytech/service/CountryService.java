@@ -6,15 +6,21 @@ import com.agpaytech.agpaytech.responses.CountryListPaginatedResponse;
 import com.agpaytech.agpaytech.exceptions.DuplicateCountryException;
 import com.agpaytech.agpaytech.models.Country;
 import com.agpaytech.agpaytech.repository.CountryRepository;
+import com.agpaytech.agpaytech.utils.CustomPaginator;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
 @Service
 public class CountryService {
+
+    private final CustomPaginator customPaginator;
+
+    public CountryService(CustomPaginator customPaginator) {
+        this.customPaginator = customPaginator;
+    }
 
     public Country saveCountry(CountryDto countryDto) {
 
@@ -43,22 +49,11 @@ public class CountryService {
 
     public CountryListPaginatedResponse fetchCountries(int pageNumber, int pageSize) {
 
-        List<List<Country>> paginatedCountries = getPages(CountryRepository.countryList, pageSize);
-        return getCountryListPaginatedResponse(pageNumber, pageSize, paginatedCountries);
+        List<List<Country>> paginatedCountries = customPaginator.getPages(CountryRepository.countryList, pageSize);
+        return getCountryListPaginatedResponse(pageNumber,  paginatedCountries);
     }
 
-    private <T> List<List<T>> getPages(Collection<T> c, Integer pageSize) {
-        if (c == null)
-            return Collections.emptyList();
-        List<T> list = new ArrayList<T>(c);
-        if (pageSize == null || pageSize <= 0 || pageSize > list.size())
-            pageSize = list.size();
-        int numPages = (int) Math.ceil((double)list.size() / (double)pageSize);
-        List<List<T>> pages = new ArrayList<>(numPages);
-        for (int pageNum = 0; pageNum < numPages;)
-            pages.add(list.subList(pageNum * pageSize, Math.min(++pageNum * pageSize, list.size())));
-        return pages;
-    }
+
 
     public CountryListPaginatedResponse fetchCountries(String searchValue, int pageNumber, int pageSize) {
 
@@ -76,11 +71,11 @@ public class CountryService {
             }
         }
 
-        List<List<Country>> paginatedCountries = getPages(matchingCountries, pageSize);
-        return getCountryListPaginatedResponse(pageNumber, pageSize, paginatedCountries);
+        List<List<Country>> paginatedCountries = customPaginator.getPages(matchingCountries, pageSize);
+        return getCountryListPaginatedResponse(pageNumber, paginatedCountries);
     }
 
-    private CountryListPaginatedResponse getCountryListPaginatedResponse(int pageNumber, int pageSize, List<List<Country>> paginatedCountries) {
+    private CountryListPaginatedResponse getCountryListPaginatedResponse(int pageNumber, List<List<Country>> paginatedCountries) {
         pageNumber = pageNumber < 0 ? 0 : pageNumber - 1;
 
         CountryListPaginatedResponse response = new CountryListPaginatedResponse();

@@ -25,7 +25,7 @@ public class CountryController {
         }catch (RuntimeException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Successfully created country " + savedCountry.getName(), HttpStatus.CREATED);
+        return new ResponseEntity<>("Successfully added country " + savedCountry.getName(), HttpStatus.CREATED);
     }
 
     @GetMapping
